@@ -194,8 +194,15 @@ async def analyze(
 
 
 # ==========================================
-# Run with: uvicorn main:app --reload
+# Run with: python main.py
 # ==========================================
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="localhost", port=8000, reload=True)
+    port = int(os.environ.get("PORT", 8000))
+    is_production = "PORT" in os.environ
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0" if is_production else "localhost",
+        port=port,
+        reload=not is_production
+    )
